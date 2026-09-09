@@ -1,7 +1,71 @@
 document.getElementById('year').textContent = new Date().getFullYear();
 
+// Agrega o edita proyectos aquí: nombre, enlace y una imagen (screenshot o thumbnail).
+const projects = [
+  {
+    name: 'Unwindy',
+    url: 'https://kuantis.github.io/unwindy/index.html',
+    // Reemplaza por una captura real del proyecto (ideal: 800x600 o similar).
+    image: 'https://placehold.co/800x600/0A0A0A/F7F7F5?text=Unwindy',
+  },
+];
+
+const track = document.getElementById('carouselTrack');
+if (track && projects.length) {
+  const buildCard = (project) => {
+    const card = document.createElement('a');
+    card.className = 'project-card';
+    card.href = project.url;
+    card.target = '_blank';
+    card.rel = 'noopener';
+
+    const img = document.createElement('img');
+    img.src = project.image;
+    img.alt = project.name;
+    img.loading = 'lazy';
+
+    const label = document.createElement('span');
+    label.className = 'project-name';
+    label.textContent = project.name;
+
+    card.appendChild(img);
+    card.appendChild(label);
+    return card;
+  };
+
+  // Se duplica la lista para lograr un loop de scroll continuo y sin cortes.
+  const renderSet = () => projects.forEach((p) => track.appendChild(buildCard(p)));
+  renderSet();
+  renderSet();
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) {
+    track.classList.add('no-spin');
+  }
+}
+
+const typeTarget = document.querySelector('.type-target');
+if (typeTarget) {
+  const fullText = typeTarget.dataset.text;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (prefersReducedMotion) {
+    typeTarget.textContent = fullText;
+  } else {
+    let i = 0;
+    const typeNext = () => {
+      typeTarget.textContent = fullText.slice(0, i);
+      i++;
+      if (i <= fullText.length) {
+        setTimeout(typeNext, 28);
+      }
+    };
+    typeNext();
+  }
+}
+
 const revealTargets = document.querySelectorAll(
-  '.principle, .process-step, .work-copy, .work-visual, .cta-form, .cta h2, .cta-lead'
+  '.principle, .process-step, .work-copy, .work-visual, .projects-title, .carousel, .cta-direct, .cta h2, .cta-lead'
 );
 
 if ('IntersectionObserver' in window) {
@@ -22,38 +86,3 @@ if ('IntersectionObserver' in window) {
 } else {
   revealTargets.forEach((el) => el.classList.add('is-visible'));
 }
-
-// Formspree: servicio gratuito de manejo de formularios por API, ideal para
-// sitios estáticos en GitHub Pages (sin backend propio).
-// Sustituye FORM_ID por tu propio endpoint creado en https://formspree.io
-const FORMSPREE_ENDPOINT = 'https://formspree.io/f/FORM_ID';
-
-const form = document.getElementById('contactForm');
-const status = document.getElementById('formStatus');
-
-form.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  status.textContent = 'Enviando...';
-
-  const submitButton = form.querySelector('button[type="submit"]');
-  submitButton.disabled = true;
-
-  try {
-    const response = await fetch(FORMSPREE_ENDPOINT, {
-      method: 'POST',
-      headers: { 'Accept': 'application/json' },
-      body: new FormData(form),
-    });
-
-    if (response.ok) {
-      status.textContent = 'Mensaje enviado. Te respondemos pronto.';
-      form.reset();
-    } else {
-      status.textContent = 'No se pudo enviar. Escríbenos directo a kuantis.dev@gmail.com';
-    }
-  } catch (error) {
-    status.textContent = 'No se pudo enviar. Escríbenos directo a hola@kuantis.dev';
-  } finally {
-    submitButton.disabled = false;
-  }
-});
