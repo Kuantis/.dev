@@ -1,14 +1,5 @@
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// Agrega o edita proyectos aquí: nombre, enlace y una imagen (screenshot o thumbnail).
-const projects = [
-  {
-    name: 'Unwindy',
-    url: 'https://kuantis.github.io/unwindy/index.html',
-    // Reemplaza por una captura real del proyecto (ideal: 800x600 o similar).
-    image: 'https://placehold.co/800x600/0A0A0A/F7F7F5?text=Unwindy',
-  },
-];
 
 const track = document.getElementById('carouselTrack');
 if (track && projects.length) {
