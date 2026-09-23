@@ -377,7 +377,7 @@ html { scrollbar-color: var(--accent) var(--white); scrollbar-width: thin; }
   font-family: 'Space Mono', var(--sans), monospace;
   font-size: 1.05rem;
   font-weight: 700;
-  color: var(--gray-line);
+  color: var(--gray-mid);
   padding-top: 4px;
   transition: color 0.3s ease;
 }
